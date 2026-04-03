@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Structural Exposure Audit™</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+body { font-family: 'DM Sans', sans-serif; margin:0; }
+.font-heading { font-family: 'Space Grotesk', sans-serif; }
+
+.container { max-width: 800px; margin: auto; padding: 20px; }
+
+.btn {
+  width:100%;
+  padding:16px;
+  border-radius:12px;
+  font-weight:600;
+  margin-top:12px;
+  cursor:pointer;
+}
+
+.option {
+  border:2px solid #334155;
+  padding:14px;
+  border-radius:10px;
+  margin-bottom:10px;
+  cursor:pointer;
+}
+
+.progress {
+  height:6px;
+  background:#1e293b;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.progress-bar {
+  height:100%;
+  background:#8b5cf6;
+}
+</style>
+</head>
+
+<body class="bg-slate-900 text-white">
+
+<div id="app"></div>
+
+<script>
+const config = {
+  next_step_url: "https://YOUR-STAN-STORE-LINK.com"
+};
+
+const sections = [
+["If you stopped working for 7 days, what happens?",["Continues","Slight dip","Drop","Stops"],[0,1,2,3]],
+["How much depends on you?",["<25%","25–50%","50–75%","All"],[0,1,2,3]],
+["If you're unavailable?",["Continues","Slows","Catch-up","Stops"],[0,1,2,3]],
+["System without you?",["Yes","Mostly","Partial","No"],[0,1,2,3]],
+["Income type?",["System","Mixed","Effort","Manual"],[0,1,2,3]]
+];
+
+let q = 0;
+let score = 0;
+
+function render() {
+  let html = `
+  <div class="container">
+    <h1 class="font-heading text-3xl mb-4">Structural Exposure Audit™</h1>
+    <div class="progress mb-4">
+      <div class="progress-bar" style="width:${(q/sections.length)*100}%"></div>
+    </div>
+  `;
+
+  if(q < sections.length){
+    let item = sections[q];
+    html += `<h2 class="text-xl mb-4">${item[0]}</h2>`;
+
+    item[1].forEach((opt,i)=>{
+      html += `<div class="option" onclick="answer(${i})">${opt}</div>`;
+    });
+  } else {
+    html += `
+      <h2 class="text-2xl mb-4">Score: ${score}</h2>
+      <p class="mb-4">Lower = structured · Higher = needs correction</p>
+      <button class="btn bg-purple-600" onclick="nextStep()">Fix Structure</button>
+    `;
+  }
+
+  html += `</div>`;
+  document.getElementById("app").innerHTML = html;
+}
+
+function answer(i){
+  score += sections[q][2][i];
+  q++;
+  render();
+}
+
+function nextStep(){
+  window.location.href = config.next_step_url;
+}
+
+render();
+</script>
+
+</body>
+</html>
